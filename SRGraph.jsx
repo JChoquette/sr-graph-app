@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Observer from "./Observer.jsx";
 import Event from "./Event.jsx";
+import * as Constants from "./Constants.js"
 
-const get_gamma = (v) =>{
-    return 1.0/Math.sqrt(1-v**2);
-}
+const starting_observers = [
+    { id: 1, speed: 0.0, x0: 0, color: "#FF0000" },
+    { id: 2, speed: 0.5, x0: 0, color: "#0000FF" },
+]
 
 const item_inputs = {
     observer:[
@@ -14,6 +16,7 @@ const item_inputs = {
     event:[
         {name:"x",label:"x"},
         {name:"t",label:"t"},
+        {name:"speed",label:"Speed (measurement frame)"},
     ],
     extended:[
         {name:"speed",label:"Speed"},
@@ -25,7 +28,7 @@ const item_inputs = {
 
 const SRGraph = () => {
     //Graph basic parameters and scaling
-    const width = 500, height = 500;
+    const width = 600, height = 600;
     const xScale = (x) => ((x + 10) / 20) * width;
     const yScale = (y) => height - ((y + 10) / 20) * height; // Flip y-axis
     const xUnscale = (px) => (px / width) * 20 - 10; // Convert pixels back to graph x-coordinates
@@ -34,11 +37,9 @@ const SRGraph = () => {
     //State variables
     const [v, setV] = useState(0); // State variable for the slider
     const [observers, setObservers] = useState([
-        { id: 1, speed: 0.0, x0: 0, color: "#FF0000" },
-        { id: 2, speed: 0.5, x0: 0, color: "#0000FF" },
+        ...starting_observers
     ]);
-    const [events, setEvents] = useState([
-    ]);
+    const [events, setEvents] = useState([]);
     const [extendeds, setExtendeds] = useState([
     ]);
     const [nextId, setNextId] = useState(3); // Unique ID counter for new observers
@@ -56,7 +57,7 @@ const SRGraph = () => {
         let item_array = item_values[0];
         let itemFunction = item_values[1];
         itemFunction(item_array.map(item => 
-            item.id === id ? { ...item, [key]: key === "color" ? value: parseFloat(value) } : item
+            item.id === id ? { ...item, [key]: (key === "color" || key === "show_axis" || key === "show_original") ? value: parseFloat(value) } : item
         ));
     };
 
@@ -84,7 +85,7 @@ const SRGraph = () => {
         setCursorPos({ x: xUnscale(mouseX), y: yUnscale(mouseY) });
     };
 
-    let gamma = get_gamma(v);
+    let gamma = Constants.get_gamma(v);
 
     return (
         <div style={{ display: "flex" }}>
@@ -139,7 +140,7 @@ const SRGraph = () => {
                         removeItem={removeItem}
                     />
                 </div>
-                 {/* Event Controls */}
+                 {/* Extended Object Controls */}
                 <div style={{ marginLeft: "20px" }}>
                     <ItemControls 
                         type={"extended"} 
@@ -172,6 +173,12 @@ const ItemControls = ({type,items,addItem,updateItem,removeItem}) => {
                         value={item.color} 
                         onChange={(e) => updateItem(type, item.id, "color", e.target.value)}
                     />
+                    {type=="observer" && [
+                        <span>Show Axis:</span>,
+                        <input type="checkbox" checked={item.show_axis} onChange={(e)=>{console.log(e);updateItem(type, item.id, "show_axis", e.target.checked);}}/>
+                    ]}
+                    <span>Show Untransformed:</span>
+                    <input type="checkbox" checked={item.show_original} onChange={(e)=>{console.log(e);updateItem(type, item.id, "show_original", e.target.checked);}}/>
                     <button onClick={() => removeItem(type, item.id)}>Remove</button>
                 </div>
             ))}
