@@ -8,3 +8,6 @@ export const Lorentz = (x,t,v,gamma) => {
 export const get_gamma = (v) =>{
     return 1.0/Math.sqrt(1-v**2);
 }
+
+export const linspace = (start, stop, num) => 
+    Array.from({ length: num }, (_, i) => start + (i / (num - 1)) * (stop - start));

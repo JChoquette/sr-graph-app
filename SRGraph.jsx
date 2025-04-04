@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Observer from "./Observer.jsx";
 import Event from "./Event.jsx";
+import Extended from "./Extended.jsx";
 import * as Constants from "./Constants.js"
 
 const starting_observers = [
-    { id: 1, speed: 0.0, x0: 0, color: "#FF0000" },
-    { id: 2, speed: 0.5, x0: 0, color: "#0000FF" },
+    { id: 1, speed: 0.0, x0: 0, color: "#0000FF" },
+    { id: 2, speed: 0.5, x0: 0, color: "#FF0000" },
 ]
 
 const item_inputs = {
@@ -21,11 +22,10 @@ const item_inputs = {
     extended:[
         {name:"speed",label:"Speed"},
         {name:"x0",label:"x_0"},
-        {name:"length",label:"Length"},
+        {name:"length",label:"Proper Length"},
     ],
 
 }
-
 const SRGraph = () => {
     //Graph basic parameters and scaling
     const width = 600, height = 600;
@@ -74,7 +74,7 @@ const SRGraph = () => {
         let item_values = item_map[type];
         let item_array = item_values[0];
         let itemFunction = item_values[1];
-        itemFunction([...item_array, { id: nextId, speed: 0, x0: 0, x:0, t:0, color:"#00FF00" }]);
+        itemFunction([...item_array, { id: nextId, speed: 0, x0: 0, x:0, t:0, length:2, color:"#00AA00" }]);
         setNextId(nextId + 1);
     };
 
@@ -94,15 +94,22 @@ const SRGraph = () => {
                 <div>
                 <svg width={width} height={height} onMouseMove={handleMouseMove}>
                     {/* Axes */}
-                    <line x1={0} x2={width} y1={yScale(0)} y2={yScale(0)} stroke="black" />
-                    <line x1={xScale(0)} x2={xScale(0)} y1={0} y2={height} stroke="black" />
-
+                    <line x1={xScale(-10)} x2={xScale(10)} y1={yScale(0)} y2={yScale(0)} stroke="black" />
+                    <line x1={xScale(0)} x2={xScale(0)} y1={yScale(-10)} y2={yScale(10)} stroke="black" />
+                    {/* Grid */}
+                    {Constants.linspace(-10,10,11).map((number)=>[
+                        <line x1={xScale(-10)} x2={xScale(10)} y1={yScale(number)} y2={yScale(number)} stroke="black" opacity={0.5}/>,
+                        <line x1={xScale(number)} x2={xScale(number)} y1={yScale(-10)} y2={yScale(10)} stroke="black" opacity={0.5}/>
+                    ])}
                     {/* Render each observer */}
                     {observers.map((observer, index) => (
                         <Observer key={index} v={v} gamma={gamma} data={observer} xScale={xScale} yScale={yScale} />
                     ))}
                     {events.map((event, index) => (
                         <Event key={index} v={v} gamma={gamma} data={event} xScale={xScale} yScale={yScale} />
+                    ))}
+                    {extendeds.map((extended, index) => (
+                        <Extended key={index} v={v} gamma={gamma} data={extended} xScale={xScale} yScale={yScale} />
                     ))}
                 </svg>
                 </div>
@@ -173,7 +180,7 @@ const ItemControls = ({type,items,addItem,updateItem,removeItem}) => {
                         value={item.color} 
                         onChange={(e) => updateItem(type, item.id, "color", e.target.value)}
                     />
-                    {type=="observer" && [
+                    {(type=="observer" || type=="extended") && [
                         <span>Show Axis:</span>,
                         <input type="checkbox" checked={item.show_axis} onChange={(e)=>{console.log(e);updateItem(type, item.id, "show_axis", e.target.checked);}}/>
                     ]}
