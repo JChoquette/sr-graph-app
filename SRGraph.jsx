@@ -210,14 +210,14 @@ const SRGraph = () => {
                             <line x1={xScale(cursorPos.x)} y1={yScale(cursorPos.y) - 5} x2={xScale(cursorPos.x)} y2={yScale(cursorPos.y) + 5} />
                             {/* Horizontal line */}
                             <line x1={xScale(cursorPos.x) - 5} y1={yScale(cursorPos.y)} x2={xScale(cursorPos.x) + 5} y2={yScale(cursorPos.y)} />
-                            <text
-                                x={xScale(-10)+10}
-                                y={yScale(-10)-20}
-                                fontsize="18"
-                            >
-                                Cursor: ({cursorPos.x.toFixed(2)}, {cursorPos.y.toFixed(2)})
-                            </text>
                         </g>
+                        <text
+                            x={xScale(-10)+10}
+                            y={yScale(-10)-20}
+                            fontSize="18"
+                        >
+                            Cursor: ({cursorPos.x.toFixed(2)}, {cursorPos.y.toFixed(2)})
+                        </text>
                     </svg>
                     </div>
                     <div class="vslider">
