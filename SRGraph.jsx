@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Observer from "./Observer.jsx";
 import Event from "./Event.jsx";
 import Extended from "./Extended.jsx";
+import Segment from "./Segment.jsx";
 import * as Constants from "./Constants.js"
 
 const starting_observers = [
@@ -9,22 +10,40 @@ const starting_observers = [
     { id: 2, speed: 0.5, x0: 0, color: "#FF0000" },
 ]
 
+const default_item = { 
+     speed: 0,
+     x0: 0, 
+     x:0, 
+     t:0, 
+     length:2,
+     x1:0,
+     x2:2,
+     t1:0,
+     t2:4,
+     color:"#00AA00" 
+}
+
 const item_inputs = {
     observer:[
-        {name:"speed",label:"Speed"},
+        {name:"speed",label:"Velocity"},
         {name:"x0",label:"x_0"},
     ],
     event:[
         {name:"x",label:"x"},
         {name:"t",label:"t"},
-        {name:"speed",label:"Speed (measurement frame)"},
+        {name:"speed",label:"v (measurement frame)"},
     ],
     extended:[
-        {name:"speed",label:"Speed"},
+        {name:"speed",label:"Velocity"},
         {name:"x0",label:"x_0"},
         {name:"length",label:"Proper Length"},
     ],
-
+    segment:[
+        {name:"x1",label:"x_1"},
+        {name:"t1",label:"t_1"},
+        {name:"x2",label:"x_2"},
+        {name:"t2",label:"t_2"},
+    ],
 }
 const SRGraph = () => {
     //Graph basic parameters and scaling
@@ -40,8 +59,8 @@ const SRGraph = () => {
         ...starting_observers
     ]);
     const [events, setEvents] = useState([]);
-    const [extendeds, setExtendeds] = useState([
-    ]);
+    const [extendeds, setExtendeds] = useState([]);
+    const [segments, setSegments] = useState([]);
     const [nextId, setNextId] = useState(3); // Unique ID counter for new observers
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
 
@@ -49,6 +68,7 @@ const SRGraph = () => {
         event:[events,setEvents],
         observer:[observers,setObservers],
         extended:[extendeds,setExtendeds],
+        segment:[segments,setSegments],
     }
 
     // Function to update a observer's values
@@ -74,7 +94,7 @@ const SRGraph = () => {
         let item_values = item_map[type];
         let item_array = item_values[0];
         let itemFunction = item_values[1];
-        itemFunction([...item_array, { id: nextId, speed: 0, x0: 0, x:0, t:0, length:2, color:"#00AA00" }]);
+        itemFunction([...item_array, {...default_item, id: nextId,}]);
         setNextId(nextId + 1);
     };
 
@@ -83,6 +103,14 @@ const SRGraph = () => {
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
         setCursorPos({ x: xUnscale(mouseX), y: yUnscale(mouseY) });
+    };
+
+    const clearAll = () =>{
+        setEvents([]);
+        setExtendeds([]);
+        setSegments([]);
+        setObservers([...starting_observers]);
+        setV(0);
     };
 
     let gamma = Constants.get_gamma(v);
@@ -111,6 +139,9 @@ const SRGraph = () => {
                     {extendeds.map((extended, index) => (
                         <Extended key={index} v={v} gamma={gamma} data={extended} xScale={xScale} yScale={yScale} />
                     ))}
+                    {segments.map((segment, index) => (
+                        <Segment key={index} v={v} gamma={gamma} data={segment} xScale={xScale} yScale={yScale} />
+                    ))}
                 </svg>
                 </div>
                 {/* Display cursor coordinates */}
@@ -125,6 +156,7 @@ const SRGraph = () => {
                     onChange={(e) => setV(parseFloat(e.target.value))}
                 />
                 <p>v = {v}</p>
+                <button onClick={()=>clearAll()}>Reset</button>
             </div>
             <div>
                  {/* Observer Controls */}
@@ -152,6 +184,16 @@ const SRGraph = () => {
                     <ItemControls 
                         type={"extended"} 
                         items={extendeds} 
+                        addItem={addItem} 
+                        updateItem={updateItem} 
+                        removeItem={removeItem}
+                    />
+                </div>
+                 {/* Segment Controls */}
+                <div style={{ marginLeft: "20px" }}>
+                    <ItemControls 
+                        type={"segment"} 
+                        items={segments} 
                         addItem={addItem} 
                         updateItem={updateItem} 
                         removeItem={removeItem}

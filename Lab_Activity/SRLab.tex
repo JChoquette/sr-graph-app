@@ -1,0 +1,164 @@
+\documentclass{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+\begin{document}
+
+\begin{tabularx}{\textwidth}{Xll}
+203-NYC-05&Group:&\underline{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}\\
+&&\underline{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}\\
+&&\underline{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}\\
+&&\underline{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}\\
+&&\underline{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}\\
+&&\underline{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}\\
+\end{tabularx}
+
+\section*{Lab Activity: Special Relativity}
+
+The goal of this lab is to use a computer simulation of the Lorentz Transformations to gain a better understanding of the following topics in special relativity: Simultaneity, Time Dilation, Length Contraction, and the Invariant Interval. \textbf{Work in groups. Each group is required to hand in only one copy at the end of class.}
+
+\subsection*{Apparatus}
+
+This lab will use the SRGraph simulation available at https://jchoquette.github.io/sr-graph-app/. The simulation allows the user to create Observers, Events, and Extended objects. The world lines of the objects are then graphed on a spacetime diagram with time as the vertical axis and position as the horizontal axis, using units in which $c=1$. All velocities will therefore be expressed as factors of $c$, and can range from 0 to 1. You can think of the time axis as having units of seconds and the horizontal as having units of light-seconds.
+
+The slider at the bottom allows you to change the frame of reference used to display the graph. By default, this is $v=0$. As you do so, all points on the graph are transformed into the corresponding frame of reference using the Lorentz Transformations:
+\begin{align*}
+x'&=\gamma\left(x-vt\right),\\
+t'&=\gamma\left(t-\frac{xv}{c^2}\right),\\
+\end{align*}
+where $\gamma=\frac{1}{\sqrt{1-v^2/c^2}}$.
+
+The following components are used in the simulation:
+\begin{enumerate}
+\item \textbf{Observers:} An "observer" in the simulation corresponds to the world-line of some object or person moving at a constant velocity relative to the $v=0$ frame. By changing the velocity of the reference frame used to display the graph, you can match the velocity of the observer to see the world from their perspective.
+
+\item \textbf{Events:} Events are given as a pair of spacetime coordinates $x$ and $t$. By default, these are the coordinates as measured in our frame of reference when we have $v=0$. You can change this by setting the velocity of the measurement frame in their settings, so that the $x$ and $t$ values you enter correspond to some other frame of your choice.
+
+\item \textbf{Extended Objects:} Extended objects are used to demonstrate how lengths change. They act similarly to observers but have a proper length as well. They will be displayed as a series of lines, each line occurs at the same time in the reference frame of the object itself.
+
+\item \textbf{Segments:} Segments which can represent a part of a trip by an observer. You can specify two points (events). A line will be drawn between the two.
+\end{enumerate}
+
+\clearpage
+
+\subsection*{Simultaneity}
+
+The default observers (blue and red) have velocities of 0 and $0.5$. If you have changed these observers, reset them to their defaults using the ``Reset'' button at the bottom. We'll call the blue one Albert and red one Barry (A and B).
+
+
+
+\begin{enumerate}
+\item (1 mark) Create two events at $(x_1,t_1)=(0,2)$ and $(x_2,t_2)=(2,2)$. These are simultaneous in Albert's reference frame. Which happens first in Barry's reference frame?
+\begin{enumerate}
+\item Event 1
+\item Event 2
+\item They happen at the same time
+\end{enumerate}
+\item (1 mark) What reference frame(s) measure Event 2 as happening first?
+\vspace{2cm}
+
+\item (1 mark) Now set the events to $(x_1,t_1)=(0,2)$ and $(x_2,t_2)=(6,4)$. Can you find a reference frame in which these are simultaneous? If so, what is its velocity? If not, why not?
+\vspace{4cm}
+\item (1 mark) Now set the events to $(x_1,t_1)=(-2,-1)$ and $(x_2,t_2)=(3,4)$. Can you find a reference frame in which these are simultaneous? If so, what is its velocity? If not, why not?
+\vspace{4cm}
+\item (1 mark) Now set the events to $(x_1,t_1)=(2,0)$ and $(x_2,t_2)=(4,2)$. Can you find a reference frame in which these are simultaneous? If so, what is its velocity? If not, why not?
+\vspace{4cm}
+\item (1 mark) In some cases you should have found there was no way to make the events simultaneous. If you could go faster than light, would you be able to change these results? What would this mean for causality in our universe?
+\vspace{4cm}
+\end{enumerate}
+
+
+\subsection*{Time Dilation}
+Reset the simulation and create two events. Toggle ``Show Untransformed'' for both events. This will allow you to see the original positions of the events. Ensure both events along Albert's world line, and separated by 4 seconds in his frame of reference.
+
+\begin{enumerate}
+\item (1 mark) Transform the graph to represent Barry's frame of reference. What time difference does Barry see between the events? Determine this by mousing over the events; the coordinates will be shown at the bottom of the screen.
+\vspace{2cm}
+\item (1 mark) Who measured the proper time in this case?
+\begin{enumerate}
+\item Albert
+\item Barry
+\item Neither
+\end{enumerate}
+\item (1 mark) Use the time dilation equation to confirm your results. Show your work below.
+\vspace{4cm}
+\item (1 mark) Change the velocity property of the events to match Barry's velocity. Events can't have velocities; instead this represents the velocity of the frame those events were measured in. So now those events should be separated by 4s in Barry's frame of reference. What is the time difference in Albert's frame (confirm on the graph)?
+\vspace{2cm}
+\clearpage
+\item (1 mark) For the events $(x_1,t_1)=(2,0)$ and $(x_2,t_2)=(4,2)$ (measured in a frame with $v=0$) how fast would an observer have to move in order to measure the proper time between them? Estimate this using your graph, no calculations.
+\vspace{2cm}
+\item (1 mark) Now calculate the exact value. Show your work below. Remember, the observer would be in a frame for which the two events happen at the same position. This could be achieved if the observer is physically present at both events.
+\vspace{4cm}
+\end{enumerate}
+
+\subsection*{Length Contraction}
+
+Reset the simulation again. Now we're going to create an extended object. The default values for the extended object are fine. The series of lines shows the object at different points in time. You can think of it as a line drawn between two events: the event corresponding to where the back of the object is at that time and the event corresponding to where the front of that object is at that time. The shaded region traces out its entire worldline.
+
+\begin{enumerate}
+\item (1 mark) Change the velocity of your reference frame. Notice what happens to the previously horizontal lines. What does this mean? Explain in terms of the events. \textit{Hint: it has to do with the relativity of simultaneity.}
+\vspace{4cm}
+\item (1 mark) With $v=0$ for the object, what length does Albert measure?
+\vspace{2cm}
+\item (1 mark) Transform the graph to Barry's perspective. What length does he measure for the object? Measure it from the graph.
+\vspace{2cm}
+\clearpage
+\item (1 mark) Who measures the proper length of the object?
+\begin{enumerate}
+\item Albert
+\item Barry
+\item Neither
+\end{enumerate}
+\item (1 mark) Confirm this result using your equation for length contraction. Show your work.
+\vspace{4cm}
+
+\item (1 mark) Reset the graph and create two events $(x_1,t_1)=(0,2)$ and $(x_2,t_2)=(6,4)$. How fast would an observer have to be moving in order to measure the proper length between these events? Measure this from the graph.
+\end{enumerate}
+
+
+\subsection*{The Invariant Interval}
+
+Reset the simulation again. Create two events, $(x_1,t_1)=(0,7)$ and $(x_2,t_2)=(6,4)$.
+
+\begin{enumerate}
+\item (1 mark) In Albert's perspective, calculate the invariant interval between the two points.
+\vspace{4cm}
+\item (1 mark) Switch to Barry's perspective. Calculate the invariant interval between them again, using measured points off the graph, to confirm it is the same.
+\vspace{4cm}
+\item (1 mark) Does this represent a proper length or a proper time? How can you know?
+\vspace{4cm}
+\end{enumerate}
+
+
+\subsection*{The Twin Paradox}
+
+Reset the simulation one last time, then delete Barry's worldline. We're going to have Barry take a trip out to the Moon and back instead. Create two segments. The first should have $(x_1,t_1)=(0,0)$ and $(x_2,t_2)=(1.5,3)$. The second should have $(x_1,t_1)=(1.5,3)$ and $(x_2,t_2)=(0,6)$. This represents Barry's trip out to the moon and back (the moon is about 1.5 light-seconds away from the Earth). He travels at a velocity of $v=+0.5$ on his way out and $v=-0.5$ on his way back.
+
+\begin{enumerate}
+\item (1 mark) How long does Albert measure for each segment of the trip?
+\vspace{2cm}
+\item (1 mark) How long does Albert measure for the total trip?
+\vspace{2cm}
+\item (1 mark) Transform the graph to Barry's perspective \textit{during the first segment}. How much time does he measure for this segment? Check the values from the graph.
+\vspace{2cm}
+\item (1 mark) Now transform the graph to his perspective \textit{for the second segement}. How much time does he measure for this second segment? Check the values from the graph.
+\vspace{2cm}
+\item (1 mark) How much time does Barry measure for the total trip?
+\vspace{2cm}
+\item (1 mark) When studying time dilation, we saw that both observers disagree about which one is moving more slowly through time. This time both observers seem to agree that Barry has aged less than Albert. Why are they now able to agree?
+\vspace{6cm}
+\end{enumerate}
+
+%Create two segments as obs 2, calculate invariant interval for each.
+
+%How much time passed for this observer?
+
+
+%Confirm your answer by going into each of the two reference frames they were in and determining the proper time.
+
+
+
+
+\end{document}
