@@ -4,6 +4,7 @@ import Event from "./Event.jsx";
 import Extended from "./Extended.jsx";
 import Segment from "./Segment.jsx";
 import * as Constants from "./Constants.js"
+import './SR.css';
 
 const starting_observers = [
     { id: 1, speed: 0.0, x0: 0, color: "#0000FF" },
@@ -23,10 +24,17 @@ const default_item = {
      color:"#00AA00" 
 }
 
+const item_labels = {
+    observer:"Observers:",
+    event:"Events:",
+    extended:"Extended Objects:",
+    segment:"Segments:",
+}
+
 const item_inputs = {
     observer:[
         {name:"speed",label:"Velocity"},
-        {name:"x0",label:"x_0"},
+        {name:"x0",label:"x0"},
     ],
     event:[
         {name:"x",label:"x"},
@@ -35,7 +43,7 @@ const item_inputs = {
     ],
     extended:[
         {name:"speed",label:"Velocity"},
-        {name:"x0",label:"x_0"},
+        {name:"x0",label:"x0"},
         {name:"length",label:"Proper Length"},
     ],
     segment:[
@@ -45,6 +53,19 @@ const item_inputs = {
         {name:"t2",label:"t_2"},
     ],
 }
+
+const input_ranges = {
+    x:{min:-10,max:10},
+    t:{min:-10,max:10},
+    x0:{min:-10,max:10},
+    x1:{min:-10,max:10},
+    t1:{min:-10,max:10},
+    x2:{min:-10,max:10},
+    t2:{min:-10,max:10},
+    speed:{min:-1,max:1},
+
+}
+
 const SRGraph = () => {
     //Graph basic parameters and scaling
     const width = 600, height = 600;
@@ -129,6 +150,25 @@ const SRGraph = () => {
                         <line x1={xScale(-10)} x2={xScale(10)} y1={yScale(number)} y2={yScale(number)} stroke="black" opacity={0.5}/>,
                         <line x1={xScale(number)} x2={xScale(number)} y1={yScale(-10)} y2={yScale(10)} stroke="black" opacity={0.5}/>
                     ])}
+                    {/* X Axis Label */}
+                    <text 
+                        x={xScale(10)-30} 
+                        y={yScale(0)-10} 
+                        textAnchor="middle" 
+                        fontSize="22"
+                    >
+                        x/c (s)
+                    </text>
+
+                    {/* Y Axis Label */}
+                    <text 
+                        x={xScale(0)+20} 
+                        y={yScale(10)+20} 
+                        textAnchor="middle" 
+                        fontSize="22"
+                    >
+                        t (s)
+                    </text>
                     {/* Render each observer */}
                     {observers.map((observer, index) => (
                         <Observer key={index} v={v} gamma={gamma} data={observer} xScale={xScale} yScale={yScale} />
@@ -142,21 +182,37 @@ const SRGraph = () => {
                     {segments.map((segment, index) => (
                         <Segment key={index} v={v} gamma={gamma} data={segment} xScale={xScale} yScale={yScale} />
                     ))}
+                    {/* Current cursor position */}
+                    <g stroke="black" strokeWidth="1">
+                        {/* Vertical line */}
+                        <line x1={xScale(cursorPos.x)} y1={yScale(cursorPos.y) - 5} x2={xScale(cursorPos.x)} y2={yScale(cursorPos.y) + 5} />
+                        {/* Horizontal line */}
+                        <line x1={xScale(cursorPos.x) - 5} y1={yScale(cursorPos.y)} x2={xScale(cursorPos.x) + 5} y2={yScale(cursorPos.y)} />
+                        <text
+                            x={xScale(-10)+10}
+                            y={yScale(-10)-20}
+                            fontsize="18"
+                        >
+                            Cursor: ({cursorPos.x.toFixed(2)}, {cursorPos.y.toFixed(2)})
+                        </text>
+                    </g>
                 </svg>
                 </div>
-                {/* Display cursor coordinates */}
-                <p>Cursor: ({cursorPos.x.toFixed(2)}, {cursorPos.y.toFixed(2)})</p>
-                {/* Slider */}
-                <input 
-                    type="range" 
-                    min="-0.99" 
-                    max="0.99" 
-                    step="0.01" 
-                    value={v} 
-                    onChange={(e) => setV(parseFloat(e.target.value))}
-                />
-                <p>v = {v}</p>
-                <button onClick={()=>clearAll()}>Reset</button>
+                <div class="vslider">
+                    <input 
+                        type="range" 
+                        min="-0.99" 
+                        max="0.99" 
+                        step="0.01" 
+                        value={v} 
+                        onChange={(e) => setV(parseFloat(e.target.value))}
+                    />
+                    <div>v = {v}</div>
+                </div>
+                <div class="bottom-options">
+                    {/* Slider */}
+                    <button onClick={()=>clearAll()}>Reset</button>
+                </div>
             </div>
             <div>
                  {/* Observer Controls */}
@@ -210,24 +266,31 @@ const ItemControls = ({type,items,addItem,updateItem,removeItem}) => {
 
     return (
         <div>
-            <h3>{type}</h3>
+            <h3>{item_labels[type]}</h3>
             {items.map(item => (
-                <div key={item.id} style={{ marginBottom: "10px", display: "flex", alignItems: "center" }}>
-                    {item_inputs[type].map(input=>
-                        <ItemInput type={type} item={item} updateItem={updateItem} name={input.name} label={input.label}/>
-                    )}
+                <div class="item-control-row" key={item.id}>
                     {/* Color Picker */}
                     <input 
+                        class="color-input"
                         type="color" 
                         value={item.color} 
                         onChange={(e) => updateItem(type, item.id, "color", e.target.value)}
                     />
-                    {(type=="observer" || type=="extended") && [
-                        <span>Show Axis:</span>,
-                        <input type="checkbox" checked={item.show_axis} onChange={(e)=>{console.log(e);updateItem(type, item.id, "show_axis", e.target.checked);}}/>
-                    ]}
-                    <span>Show Untransformed:</span>
-                    <input type="checkbox" checked={item.show_original} onChange={(e)=>{console.log(e);updateItem(type, item.id, "show_original", e.target.checked);}}/>
+                    {item_inputs[type].map(input=>
+                        <ItemInput type={type} item={item} updateItem={updateItem} name={input.name} label={input.label}/>
+                    )}
+                    <div class="checkboxes">
+                        {(type=="observer" || type=="extended") && 
+                            <div>
+                                <input type="checkbox" checked={item.show_axis} onChange={(e)=>{console.log(e);updateItem(type, item.id, "show_axis", e.target.checked);}}/>
+                                <span>Show Axis</span>
+                            </div>
+                        }
+                        <div>
+                            <input type="checkbox" checked={item.show_original} onChange={(e)=>{console.log(e);updateItem(type, item.id, "show_original", e.target.checked);}}/>
+                            <span>Show Untransformed</span>
+                        </div>
+                    </div>
                     <button onClick={() => removeItem(type, item.id)}>Remove</button>
                 </div>
             ))}
@@ -238,13 +301,16 @@ const ItemControls = ({type,items,addItem,updateItem,removeItem}) => {
 
 const ItemInput = ({type, item,updateItem,name,label}) =>{
     return(
-        [
-            <span> {label}: </span>,
+        <div class="input-slider">
+            <span> {label}: {item[name]}</span>
             <input 
-                type="number" step="0.1" 
+                type="range" 
+                min={input_ranges[name].min}
+                max={input_ranges[name].max}
+                step="0.01"  
                 value={item[name]} 
                 onChange={(e) => updateItem(type, item.id, name, e.target.value)}
             />
-        ]
+        </div>
     );
 }
