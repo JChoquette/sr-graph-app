@@ -325,7 +325,13 @@ const ItemControls = ({type,items,addItem,updateItem,removeItem}) => {
 const ItemInput = ({type, item,updateItem,name,label}) =>{
     return(
         <div class="input-slider">
-            <span> {label}: {item[name]}</span>
+            <span> {label}: <input 
+                type="number" 
+                min={input_ranges[name].min}
+                max={input_ranges[name].max}
+                step={0.1} value={item[name]} 
+                onChange={(e) => updateItem(type, item.id, name, e.target.value)}
+            /></span>
             <input 
                 type="range" 
                 min={input_ranges[name].min}
