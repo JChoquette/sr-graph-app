@@ -82,6 +82,7 @@ const input_ranges = {
     t1:{min:-10,max:10},
     x2:{min:-10,max:10},
     t2:{min:-10,max:10},
+    length:{min:0.1,max:10},
     speed:{min:-1,max:1},
 
 }
