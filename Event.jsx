@@ -41,7 +41,7 @@ const Event = ({ data, v, gamma, xScale, yScale }) => {
         <g>
             <circle 
                 cx={xScale(e.x)} cy={yScale(e.t)} 
-                fill={data.color} r={4}
+                fill={data.color} r={6}
             />
             {original}
         </g>

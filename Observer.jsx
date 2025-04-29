@@ -61,7 +61,7 @@ const Observer = ({ data, v, gamma, xScale, yScale }) => {
             <line 
                 x1={xScale(e1.x)} y1={yScale(e1.t)} 
                 x2={xScale(e2.x)} y2={yScale(e2.t)} 
-                stroke={data.color} strokeWidth="2" 
+                stroke={data.color} strokeWidth="3" 
             />
             {axis}
             {original}
